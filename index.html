@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conciliação de Valores — Kalunga</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* (todo o CSS permanece igual ao anterior, sem alterações) */
+    :root {
+      --brand: #0F3460;
+      --brand-light: #1A5276;
+      --bg: #F0F2F5;
+      --surface: #FFFFFF;
+      --surface2: #F8F9FB;
+      --border: #DDE1E8;
+      --border-strong: #B0B8C8;
+      --text-primary: #0D1B2A;
+      --text-muted: #6B7A8F;
+      --text-light: #9AA5B4;
+      --success: #2A9D8F;
+      --success-bg: #E8F7F5;
+      --warning: #F4A261;
+      --warning-bg: #FEF4EB;
+      --danger: #E63946;
+      --danger-bg: #FDECEA;
+      --info: #457B9D;
+      --info-bg: #EBF3F8;
+      --pending-bg: #F0F2F5;
+      --c-transp: #2563EB;
+      --c-transp-bg: #EFF6FF;
+      --c-bank: #7C3AED;
+      --c-bank-bg: #F5F3FF;
+      --radius: 10px;
+      --radius-sm: 6px;
+      --shadow: 0 1px 3px rgba(13, 27, 42, .08), 0 4px 12px rgba(13, 27, 42, .04);
+      --shadow-lg: 0 4px 24px rgba(13, 27, 42, .12);
+      --mono: 'IBM Plex Mono', monospace;
+      --sans: 'IBM Plex Sans', sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text-primary);
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .topbar {
+      height: 50px;
+      background: var(--brand);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+    }
+
+    .topbar-logo {
+      height: 23px;
+    }
+
+    .tdiv {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, .2);
+    }
+
+    .topbar-title {
+      color: rgba(255, 255, 255, .82);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .topbar-chips {
+      margin-left: auto;
+      display: flex;
+      gap: 6px;
+    }
+
+    .topbar-chip {
+      background: rgba(255, 255, 255, .1);
+      color: rgba(255, 255, 255, .8);
+      border: 1px solid rgba(255, 255, 255, .15);
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .pw {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 10px 18px 28px;
+    }
+
+    .ph {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ph h1 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .ph p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 2px 0 0;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .chb {
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .chb .title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chb .title i {
+      color: var(--brand);
+      font-size: 13px;
+    }
+
+    .cbp {
+      padding: 10px 14px;
+    }
+
+    .src-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .src-slot {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      position: relative;
+      flex: 1;
+      min-width: 180px;
+      max-width: 300px;
+    }
+
+    .src-slot .slabel {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .src-slot .fbox {
+      position: relative;
+      flex: 1;
+    }
+
+    .src-slot .fbox input[type=file] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+
+    .fpill {
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 4px 9px;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all .15s;
+      overflow: hidden;
+    }
+
+    .fpill i {
+      flex-shrink: 0;
+    }
+
+    .fpill span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .fpill.loaded {
+      border-color: var(--brand);
+      background: #EBF0F8;
+      color: var(--brand);
+    }
+
+    .sdiv {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .src-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .sd-loja {
+      background: var(--brand);
+    }
+
+    .sd-transp {
+      background: var(--c-transp);
+    }
+
+    .sd-bank {
+      background: var(--c-bank);
+    }
+
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    @media(max-width:900px) {
+      .kpi-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .kc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 10px 13px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kc::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .kc.kl::before {
+      background: var(--brand);
+    }
+
+    .kc.kt::before {
+      background: var(--c-transp);
+    }
+
+    .kc.kb::before {
+      background: var(--c-bank);
+    }
+
+    .kc.ke::before {
+      background: var(--danger);
+    }
+
+    .kl-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .kl-value {
+      font-family: var(--mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .kl-sub {
+      font-size: 10px;
+      color: var(--text-light);
+      margin-top: 1px;
+    }
+
+    .frow {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
+    .fg {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex: 1;
+      min-width: 130px;
+    }
+
+    .fg label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--text-muted);
+    }
+
+    .fg input,
+    .fg select {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 5px 9px;
+      font-size: 12px;
+      font-family: var(--sans);
+      background: var(--surface);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color .15s;
+      height: 30px;
+    }
+
+    .fg input:focus,
+    .fg select:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(15, 52, 96, .1);
+    }
+
+    .ms-wrap {
+      position: relative;
+    }
+
+    .mst {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0 9px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      background: var(--surface);
+      font-size: 12px;
+      color: var(--text-primary);
+      user-select: none;
+      transition: border-color .15s;
+    }
+
+    .mst:hover {
+      border-color: var(--border-strong);
+    }
+
+    .mst.open {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(15, 52, 96, .1);
+    }
+
+    .mst .chev {
+      font-size: 9px;
+      color: var(--text-muted);
+      transition: transform .15s;
+    }
+
+    .mst.open .chev {
+      transform: rotate(180deg);
+    }
+
+    .msp {
+      position: absolute;
+      top: calc(100% + 3px);
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-lg);
+      z-index: 200;
+      display: none;
+      overflow: hidden;
+    }
+
+    .msp.open {
+      display: block;
+    }
+
+    .mss {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mss input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 4px 7px;
+      font-size: 11px;
+      outline: none;
+    }
+
+    .msa {
+      display: flex;
+      gap: 10px;
+      padding: 4px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .msa button {
+      background: none;
+      border: none;
+      color: var(--brand);
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+
+    .msa button:hover {
+      text-decoration: underline;
+    }
+
+    .msl {
+      max-height: 190px;
+      overflow-y: auto;
+    }
+
+    .msi {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background .1s;
+    }
+
+    .msi:hover {
+      background: var(--surface2);
+    }
+
+    .msi .chk {
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--border-strong);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all .15s;
+    }
+
+    .msi.checked .chk {
+      background: var(--brand);
+      border-color: var(--brand);
+    }
+
+    .msi.checked .chk::after {
+      content: '';
+      width: 5px;
+      height: 3px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+
+    .ms-empty {
+      padding: 8px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .dt {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .dt thead th {
+      background: var(--surface2);
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      padding: 7px 11px;
+      white-space: nowrap;
+      border-bottom: 2px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .dt thead th.sort {
+      cursor: pointer;
+    }
+
+    .dt thead th.sort:hover {
+      color: var(--brand);
+    }
+
+    .dt thead th .si {
+      margin-left: 2px;
+      opacity: .35;
+      font-size: 9px;
+    }
+
+    .dt thead th.asc .si,
+    .dt thead th.desc .si {
+      opacity: 1;
+      color: var(--brand);
+    }
+
+    .dt tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .1s;
+    }
+
+    .dt tbody tr:hover {
+      background: #F5F7FA;
+    }
+
+    .dt tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .dt tbody td {
+      padding: 7px 11px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .mono {
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .val {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .vl {
+      color: var(--text-primary);
+    }
+
+    .vt {
+      color: var(--c-transp);
+    }
+
+    .vb {
+      color: var(--c-bank);
+    }
+
+    .empty-row td {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+    }
+
+    .empty-row i {
+      font-size: 26px;
+      display: block;
+      margin-bottom: 6px;
+      opacity: .4;
+    }
+
+    .bp {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .bs {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .bw {
+      background: var(--warning-bg);
+      color: #B55E20;
+    }
+
+    .bd {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .bi {
+      background: var(--info-bg);
+      color: var(--info);
+    }
+
+    .bn {
+      background: var(--pending-bg);
+      color: var(--text-muted);
+    }
+
+    .bcof {
+      background: #0F3460;
+      color: #fff;
+    }
+
+    .btrans {
+      background: var(--c-transp);
+      color: #fff;
+    }
+
+    .bbank {
+      background: var(--c-bank);
+      color: #fff;
+    }
+
+    .bfin {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .bpar {
+      background: var(--warning-bg);
+      color: #B55E20;
+    }
+
+    .btrk {
+      background: var(--info-bg);
+      color: var(--info);
+    }
+
+    .bsng {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .birr {
+      background: #F3E8FF;
+      color: #7C3AED;
+    }
+
+    .btn-icon {
+      width: 27px;
+      height: 27px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all .15s;
+    }
+
+    .btn-icon:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+      background: var(--info-bg);
+    }
+
+    .btn-main {
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--sans);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: background .15s, transform .1s;
+    }
+
+    .btn-main:hover {
+      background: var(--brand-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 5px 11px;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: var(--sans);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all .15s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--border-strong);
+      color: var(--text-primary);
+      background: var(--surface2);
+    }
+
+    .btn-ghost.danger:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
+
+    .mtabs {
+      display: flex;
+      gap: 2px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 2px;
+      border: 1px solid var(--border);
+    }
+
+    .mtab {
+      flex: 1;
+      text-align: center;
+      padding: 3px 11px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      color: var(--text-muted);
+      border: none;
+      background: transparent;
+      white-space: nowrap;
+    }
+
+    .mtab.active {
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 1px 4px rgba(15, 52, 96, .25);
+    }
+
+    .pbw {
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .pbf {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--success), #2A9D8F);
+      transition: width .4s ease;
+    }
+
+    .pagbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 13px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .pgbtns {
+      display: flex;
+      gap: 3px;
+    }
+
+    .pgbtn {
+      width: 25px;
+      height: 25px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all .15s;
+    }
+
+    .pgbtn:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+
+    .pgbtn.active {
+      background: var(--brand);
+      border-color: var(--brand);
+      color: #fff;
+    }
+
+    .pgbtn:disabled {
+      opacity: .4;
+      pointer-events: none;
+    }
+
+    .flatpickr-calendar {
+      font-family: var(--sans);
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+      background: var(--brand) !important;
+      border-color: var(--brand) !important;
+    }
+
+    .flatpickr-day.inRange {
+      background: rgba(15, 52, 96, .08) !important;
+      border-color: transparent;
+    }
+
+    .tscroll {
+      max-height: 480px;
+      overflow-y: auto;
+    }
+
+    .alert-bar {
+      padding: 7px 13px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .alert-bar.show {
+      display: flex;
+    }
+
+    .alert-bar.error {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #F5C6CA;
+    }
+
+    .alert-bar.success {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #A8DFDA;
+    }
+
+    .rc {
+      background: #F0FBF9 !important;
+    }
+
+    .rdi {
+      background: #FEF5F5 !important;
+    }
+
+    .mbd {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .4);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mbd.open {
+      display: flex;
+    }
+
+    .mbox {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      width: 600px;
+      max-width: 96vw;
+      animation: sli .2s ease;
+    }
+
+    @keyframes sli {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .mhead {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mhead h5 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .mbp {
+      padding: 14px 16px;
+    }
+
+    .mfoot {
+      padding: 11px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 7px;
+    }
+
+    .dgrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .di label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .di span {
+      font-size: 12px;
+      color: var(--text-primary);
+      font-family: var(--mono);
+    }
+
+    .rp {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      padding: 11px;
+      border: 1px solid var(--border);
+      margin-top: 10px;
+    }
+
+    .rpc {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .rpc label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .rpv {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .rpv.match {
+      color: var(--success);
+    }
+
+    .rpv.nomatch {
+      color: var(--danger);
+    }
+
+    .rpv.na {
+      color: var(--text-light);
+    }
+
+    .rpsub {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .vi {
+      border: 1px dashed var(--border-strong);
+      border-radius: 4px;
+      padding: 4px 7px;
+      font-family: var(--mono);
+      font-size: 12px;
+      width: 100%;
+      background: var(--surface2);
+      outline: none;
+      text-align: right;
+    }
+
+    .vi:focus {
+      border-color: var(--brand);
+      background: #EBF0F8;
+    }
+
+    .ssep {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--text-muted);
+      padding: 10px 0 4px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: 8px;
+      transition: color .15s;
+    }
+
+    .icon-btn:hover {
+      color: var(--brand);
+    }
+
+    .filter-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <img src="https://static.kalunga.com.br/especial/logotipo/logo-kalunga-branco.svg" alt="Kalunga" class="topbar-logo"
+      onerror="this.src='https://via.placeholder.com/130x23/0F3460/ffffff?text=Kalunga'">
+    <div class="tdiv"></div>
+    <span class="topbar-title">Financeiro · Conciliação de Valores em Espécie</span>
+    <div class="topbar-chips"><span class="topbar-chip"><i class="bi bi-shield-check me-1"></i>Produção</span></div>
+  </header>
+
+  <div class="pw">
+    <div class="ph">
+      <div>
+        <h1>Conciliação de Valores em Espécie</h1>
+        <p>Cruzamento Loja · Transportadora · Extrato Bancário</p>
+      </div>
+      <!-- botão exportar removido -->
+    </div>
+
+    <div class="alert-bar" id="alertBar"></div>
+
+    <!-- Área de status da conciliação -->
+    <div class="card mb-1">
+      <div class="cbp">
+        <div class="src-bar">
+          <div class="mtabs" id="modeTabs">
+            <button class="mtab active" data-mode="all">Todas</button>
+            <button class="mtab" data-mode="Transporte de Valores">Transportadora</button>
+            <button class="mtab" data-mode="Cofre Eletrônico">Cofre</button>
+          </div>
+          <div class="sdiv"></div>
+          <div class="mtabs" id="statusTabs">
+            <button class="mtab" data-status="all">Todos</button>
+            <button class="mtab" data-status="Conciliado">Conciliado</button>
+            <button class="mtab active" data-status="Pendente">Pendente</button>
+          </div>
+          <div class="sdiv"></div>
+          <div style="display:flex;align-items:center;gap:7px;flex:1;min-width:120px;">
+            <span style="font-size:10px;color:var(--text-muted);white-space:nowrap;">Conciliação</span>
+            <div style="flex:1;">
+              <div class="pbw">
+                <div class="pbf" id="progressBar" style="width:0%"></div>
+              </div>
+            </div>
+            <span style="font-size:10px;font-weight:700;color:var(--text-primary);white-space:nowrap;"
+              id="progressLabel">0 / 0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-strip">
+      <div class="kc kl">
+        <div class="kl-label"><span class="src-dot sd-loja"></span>Total Loja (OCT)</div>
+        <div class="kl-value" id="kpiLoja">R$ —</div>
+        <div class="kl-sub" id="kpiLojaC">— registros</div>
+      </div>
+      <div class="kc kt">
+        <div class="kl-label"><span class="src-dot sd-transp"></span>Transportadora</div>
+        <div class="kl-value" id="kpiTransp">R$ —</div>
+        <div class="kl-sub" id="kpiTranspC">— com valor</div>
+      </div>
+      <div class="kc kb">
+        <div class="kl-label"><span class="src-dot sd-bank"></span>Extrato Bancário</div>
+        <div class="kl-value" id="kpiBank">R$ —</div>
+        <div class="kl-sub" id="kpiBankC">— lançamentos</div>
+      </div>
+      <div class="kc ke">
+        <div class="kl-label"><i class="bi bi-exclamation-circle" style="color:var(--danger)"></i>Divergências</div>
+        <div class="kl-value" id="kpiDiv">—</div>
+        <div class="kl-sub" id="kpiDivN">— registros</div>
+      </div>
+    </div>
+
+    <!-- Filtros com botões de aplicar e limpar (ícones) -->
+    <div class="card mb-1">
+      <div class="chb">
+        <div class="title"><i class="bi bi-funnel"></i>Filtros</div>
+      </div>
+      <div class="cbp">
+        <div class="frow">
+          <div class="fg" style="max-width:190px;"><label>Loja</label>
+            <div class="ms-wrap">
+              <div class="mst" id="lojaT"><span id="lojaLbl">Todas</span><i class="bi bi-chevron-down chev"></i></div>
+              <div class="msp" id="lojaP">
+                <div class="mss"><input type="text" id="lojaS" placeholder="Buscar…"></div>
+                <div class="msa"><button id="lojaTd">Todos</button><button id="lojaNh">Nenhum</button></div>
+                <div class="msl" id="lojaL"></div>
+                <div class="ms-empty" id="lojaE" style="display:none">Sem resultados</div>
+              </div>
+            </div>
+          </div>
+          <div class="fg" style="max-width:150px;"><label>Modalidade</label><select id="filtroMod">
+              <option value="">Todas</option>
+              <option value="Transporte de Valores">Transporte</option>
+              <option value="Cofre Eletrônico">Cofre</option>
+            </select></div>
+          <div class="fg" style="max-width:230px;"><label>Período (Data Mov.)</label><input type="text" id="dataRange"
+              placeholder="Selecione intervalo…"></div>
+          <div class="fg"><label>Buscar OCT / GTV</label>
+            <div style="position:relative;"><i class="bi bi-search"
+                style="position:absolute;left:7px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:10px;"></i><input
+                type="text" id="filtroTxt" placeholder="Nº documento…" style="padding-left:23px;"></div>
+          </div>
+          <div class="filter-actions">
+            <button class="icon-btn" id="btnAplicar" title="Aplicar filtros"><i class="bi bi-search"></i></button>
+            <button class="icon-btn" id="btnLimparF" title="Limpar filtros"><i class="bi bi-x-lg"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela (colunas: Loja, OCT, Situação, Tipo, Val. Loja, Data Mov., GTV, Modalidade, Val. Transp., Dt. Coleta, Val. Banco, Dt. Banco, Status, Ações) -->
+    <div class="card">
+      <div class="chb">
+        <div class="title"><i class="bi bi-table"></i>Registros de Conciliação</div>
+        <div class="d-flex align-items-center gap-2">
+          <span id="tableCount" style="font-size:11px;color:var(--text-muted);">0 registros</span>
+          <button class="btn-icon" id="btnPrint" title="Imprimir"><i class="bi bi-printer"></i></button>
+        </div>
+      </div>
+      <div class="tscroll">
+        <table class="dt">
+          <thead>
+            <tr>
+              <th class="sort" data-col="loja">Loja <i class="bi bi-arrow-down-up si"></i></th>
+              <th class="sort" data-col="oct">OCT <i class="bi bi-arrow-down-up si"></i></th>
+              <th>Situação</th>
+              <th>Tipo</th>
+              <th class="sort" data-col="valorNum">Val. Loja <i class="bi bi-arrow-down-up si"></i></th>
+              <th class="sort" data-col="dataMov">Data Mov. <i class="bi bi-arrow-down-up si"></i></th>
+              <th class="sort" data-col="gtv">GTV <i class="bi bi-arrow-down-up si"></i></th>
+              <th>Modalidade</th>
+              <th style="border-left:2px solid #BFDBFE;color:var(--c-transp)">Val. Transp.</th>
+              <th style="color:var(--c-transp)">Dt. Coleta</th>
+              <th style="border-left:2px solid #DDD6FE;color:var(--c-bank)">Val. Banco</th>
+              <th style="color:var(--c-bank)">Dt. Banco</th>
+              <th>Status</th>
+              <th style="text-align:center">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tBody">
+            <tr class="empty-row" id="linhaV">
+              <td colspan="14"><i class="bi bi-inbox"></i>Carregando dados...<br><span style="font-size:11px;">Aguarde,
+                  estamos buscando o arquivo do servidor.</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagbar"><span id="pagInfo">—</span>
+        <div class="pgbtns" id="pagBtns"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de detalhe -->
+  <div class="mbd" id="detalheModal">
+    <div class="mbox">
+      <div class="mhead">
+        <h5><i class="bi bi-file-text me-2" style="color:var(--brand)"></i>Detalhe · Conciliação</h5><button
+          class="btn-icon" id="fecharModal"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="mbp">
+        <div class="ssep">Dados da Loja (OCT)</div>
+        <div class="dgrid" id="detalheGrid"></div>
+        <div class="ssep" style="margin-top:12px;">Resumo de Valores</div>
+        <div class="rp">
+          <div class="rpc"><label><span class="src-dot sd-loja"></span> Loja (OCT)</label>
+            <div class="rpv" id="recLoja">—</div>
+          </div>
+          <div class="rpc"><label><span class="src-dot sd-transp"></span> Transportadora</label>
+            <div class="rpv" id="recTransp">—</div>
+            <div class="rpsub" id="recTranspDt"></div>
+          </div>
+          <div class="rpc"><label><span class="src-dot sd-bank"></span> Banco</label>
+            <div class="rpv" id="recBank">—</div>
+            <div class="rpsub" id="recBankDt"></div>
+          </div>
+        </div>
+        <div class="ssep" style="margin-top:12px;">Conciliação Manual</div>
+        <div class="row g-2">
+          <div class="col-4"><label style="font-size:10px;color:var(--text-muted);display:block;margin-bottom:3px;">Val.
+              Depositado (R$)</label><input type="text" class="vi" id="modalValDep" placeholder="0,00"></div>
+          <div class="col-4"><label
+              style="font-size:10px;color:var(--text-muted);display:block;margin-bottom:3px;">Status</label><select
+              class="form-select form-select-sm" id="modalStatus">
+              <option value="Pendente">⏳ Pendente</option>
+              <option value="Conciliado">✅ Conciliado</option>
+              <option value="Divergente">⚠️ Divergente</option>
+            </select></div>
+          <div class="col-4"><label
+              style="font-size:10px;color:var(--text-muted);display:block;margin-bottom:3px;">Observação</label><input
+              type="text" class="form-control form-control-sm" id="modalObs" placeholder="Obs. interna…"></div>
+        </div>
+      </div>
+      <div class="mfoot"><button class="btn-ghost" id="cancelarModal">Cancelar</button><button class="btn-main"
+          id="salvarModal"><i class="bi bi-check-lg"></i> Salvar</button></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+  <script>
+    /* ===== Estado ===== */
+    let dadosLoja = [], dadosTransp = {}, dadosBank = {}, dadosFiltrados = [];
+    let editIdx = null, modeFilter = 'all', statusFilter = 'Pendente', sortCol = 'dataMov', sortDir = 'asc', pagina = 1;
+    const POR_PAG = 50;
+
+    const fmt = v => typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '—';
+    function fmtDate(v) {
+      if (v === null || v === undefined || v === '') return '';
+      if (v instanceof Date) return isNaN(v) ? '' : v.toLocaleDateString('pt-BR');
+      if (typeof v === 'number') {
+        if (v === 0) return '';
+        const d = new Date(Math.round((v - 25569) * 86400000));
+        return isNaN(d) ? '' : d.toLocaleDateString('pt-BR');
+      }
+      const s = String(v).trim();
+      const iso = s.split(/[ T]/)[0];
+      const p = iso.split('-');
+      if (p.length === 3 && p[0].length === 4) return `${p[2].padStart(2, '0')}/${p[1].padStart(2, '0')}/${p[0]}`;
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(s)) return s;
+      const d2 = new Date(s); return isNaN(d2) ? s : d2.toLocaleDateString('pt-BR');
+    }
+    function parseValor(v) {
+      if (v === null || v === undefined || v === '') return 0;
+      if (typeof v === 'number') return v;
+      const s = String(v).replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
+      const n = parseFloat(s); return isNaN(n) ? 0 : n;
+    }
+    function parseDtBR(s) {
+      if (!s) return null;
+      const p = String(s).split('/');
+      if (p.length === 3) return new Date(+p[2], +p[1] - 1, +p[0]);
+      const d = new Date(s); return isNaN(d) ? null : d;
+    }
+    function padLoja(v) { return String(v).trim().replace(/\D/g, '').padStart(4, '0'); }
+    function mapSit(r) {
+      const m = { U: { c: 'bfin', t: 'Final' }, I: { c: 'bfin', t: 'Final' }, D: { c: 'bpar', t: 'Parcial' }, T: { c: 'btrk', t: 'Troco' }, S: { c: 'bsng', t: 'Sangria' }, '0': { c: 'birr', t: 'Irregular' } };
+      return m[String(r).trim().toUpperCase()] || { c: 'bn', t: r || '—' };
+    }
+    // Mapeamento para o campo "Tipo" (coluna 3 da aba Loja)
+    function mapTipo(t) {
+      const m = {
+        'U': { c: 'bfin', t: 'Único' },
+        'I': { c: 'bfin', t: 'Integral' },
+        'A': { c: 'bpar', t: 'Cheque' },
+        'C': { c: 'bpar', t: 'Cartão' },
+        'D': { c: 'bpar', t: 'Dinheiro' },
+        'T': { c: 'btrk', t: 'Troco' },
+        '0': { c: 'birr', t: 'Irregular' },
+        'B': { c: 'bfin', t: 'Boleto' },
+        'K': { c: 'bfin', t: 'Crédito' },
+        'M': { c: 'bfin', t: 'Débito' }
+      };
+      const key = String(t).trim().toUpperCase();
+      return m[key] || { c: 'bn', t: t || '—' };
+    }
+    function alert2(msg, type = 'error') {
+      const el = document.getElementById('alertBar');
+      el.innerHTML = `<i class="bi bi-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i> ${msg}`;
+      el.className = `alert-bar show ${type}`;
+      setTimeout(() => el.className = 'alert-bar', 5000);
+    }
+
+    /* ===== Parsers (mesmos) ===== */
+    function parseOCT(rows) {
+      if (!rows || rows.length < 2) throw new Error('Aba "Arquivo Loja" vazia ou ausente.');
+      const dados = [];
+      rows.slice(1).forEach(r => {
+        if (!r || r.length < 7) return;
+        const loja = padLoja(r[0]);
+        const oct = String(r[1] ?? '').trim();
+        const stsOct = String(r[2] ?? '').trim();
+        const tipo = String(r[3] ?? '').trim();
+        const valorNum = parseValor(r[4]);
+        const dataMov = fmtDate(r[5]);
+        const gtv = String(r[6] ?? '').trim();
+        if (!loja && !oct) return;
+        dados.push({
+          loja, oct, stsOct, tipo, valorNum, dataMov, gtv,
+          valorTransp: null, dtColeta: '', valorBank: null, dtBanco: '',
+          valorDep: stsOct.toUpperCase() === 'S' ? valorNum : null,
+          status: 'Pendente', obs: '', modalidade: 'Transporte de Valores'
+        });
+      });
+      if (!dados.length) throw new Error('Nenhuma linha válida na aba Loja.');
+      const gtvC = {};
+      dados.forEach(d => { if (d.gtv && d.gtv !== '0') gtvC[d.gtv] = (gtvC[d.gtv] || 0) + 1; });
+      dados.forEach(d => { d.modalidade = (gtvC[d.gtv] > 1) ? 'Cofre Eletrônico' : 'Transporte de Valores'; });
+      dados.sort((a, b) => { const da = parseDtBR(a.dataMov), db = parseDtBR(b.dataMov); if (da && db) return da - db; return da ? -1 : 1; });
+      return dados;
+    }
+
+    function parseTransp(rows) {
+      const res = {};
+      rows.slice(1).forEach(r => {
+        if (!r || r.length < 4) return;
+        const loja = padLoja(r[0]);
+        const vl = parseValor(r[1]);
+        const dtColeta = fmtDate(r[2]);
+        const gtv = String(r[3] ?? '').trim();
+        if (!loja) return;
+        if (!res[loja]) res[loja] = [];
+        res[loja].push({ dtColeta, vlDeclarado: vl, gtv });
+      });
+      return res;
+    }
+
+    function parseBank(rows) {
+      const res = {};
+      rows.slice(1).forEach(r => {
+        if (!r || r.length < 3) return;
+        const loja = padLoja(r[0]);
+        const vl = parseValor(r[1]);
+        const dtBanco = fmtDate(r[2]);
+        if (!loja) return;
+        if (!res[loja]) res[loja] = [];
+        res[loja].push({ dtBanco, vlBanco: vl });
+      });
+      return res;
+    }
+
+    function enriquecer() {
+      const tIdx = {}, bIdx = {};
+      dadosLoja.forEach(d => {
+        const l = d.loja;
+        if (dadosTransp[l]) {
+          const i = tIdx[l] || 0;
+          if (dadosTransp[l][i]) {
+            d.valorTransp = dadosTransp[l][i].vlDeclarado;
+            d.dtColeta = dadosTransp[l][i].dtColeta;
+          }
+          tIdx[l] = i + 1;
+        }
+        if (dadosBank[l]) {
+          const i = bIdx[l] || 0;
+          if (dadosBank[l][i]) {
+            d.valorBank = dadosBank[l][i].vlBanco;
+            d.dtBanco = dadosBank[l][i].dtBanco;
+          }
+          bIdx[l] = i + 1;
+        }
+        // Status automático: conciliado se valorLoja == valorBanco (ambos existentes)
+        if (d.valorBank !== null && d.valorBank === d.valorNum) {
+          d.status = 'Conciliado';
+        } else {
+          if (d.status !== 'Conciliado') d.status = 'Pendente';
+        }
+      });
+    }
+
+    /* ===== Carregar arquivo do servidor ===== */
+    async function carregarDoServidor() {
+      const url = 'https://img.kalunga.com.br/Hotsite/tela_tesouraria.xlsx';
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const blob = await response.blob();
+        const file = new File([blob], 'tela_tesouraria.xlsx', { type: blob.type });
+        const data = await file.arrayBuffer();
+        const wb = XLSX.read(data, { type: 'array' });
+        processarWorkbook(wb);
+      } catch (err) {
+        alert2('Erro ao carregar arquivo do servidor: ' + err.message + '. Verifique CORS ou baixe o arquivo e use o upload.', 'error');
+        document.getElementById('linhaV').innerHTML = '<td colspan="14"><i class="bi bi-exclamation-triangle"></i> Falha ao carregar dados.<br><span style="font-size:11px;">Tente novamente mais tarde.</span></td>';
+      }
+    }
+
+    function processarWorkbook(wb) {
+      const sheetNames = wb.SheetNames;
+      const abaLoja = sheetNames.find(n => n.toLowerCase().includes('loja')) || sheetNames[0];
+      const abaTransp = sheetNames.find(n => n.toLowerCase().includes('transportadora')) || sheetNames[1];
+      const abaBank = sheetNames.find(n => n.toLowerCase().includes('banco')) || sheetNames[2];
+      if (!abaLoja) throw new Error('Nenhuma aba com "Loja" encontrada.');
+      const wsLoja = wb.Sheets[abaLoja];
+      const wsTransp = wb.Sheets[abaTransp];
+      const wsBank = wb.Sheets[abaBank];
+      const rowsLoja = XLSX.utils.sheet_to_json(wsLoja, { header: 1, defval: '', raw: true });
+      const rowsTransp = wsTransp ? XLSX.utils.sheet_to_json(wsTransp, { header: 1, defval: '', raw: true }) : [];
+      const rowsBank = wsBank ? XLSX.utils.sheet_to_json(wsBank, { header: 1, defval: '', raw: true }) : [];
+
+      dadosLoja = parseOCT(rowsLoja);
+      dadosTransp = rowsTransp.length ? parseTransp(rowsTransp) : {};
+      dadosBank = rowsBank.length ? parseBank(rowsBank) : {};
+      enriquecer();
+
+      const lojas = [...new Set(dadosLoja.map(d => d.loja))].sort();
+      document.getElementById('lojaL').innerHTML = lojas.map(l => `<div class="msi checked" data-value="${l}"><div class="chk"></div>${l}</div>`).join('');
+      dadosFiltrados = [...dadosLoja];
+      pagina = 1;
+      aplicarFiltros(false);
+      alert2(`${dadosLoja.length} registros processados.`, 'success');
+    }
+
+    /* ===== Eventos de UI ===== */
+    document.getElementById('btnAplicar').addEventListener('click', () => aplicarFiltros());
+    document.getElementById('btnLimparF').addEventListener('click', () => {
+      document.getElementById('dataRange').value = '';
+      document.getElementById('filtroMod').value = '';
+      document.getElementById('filtroTxt').value = '';
+      document.querySelectorAll('#lojaL .msi').forEach(li => li.classList.add('checked'));
+      updLbl('lojaL', document.getElementById('lojaLbl'));
+      aplicarFiltros();
+    });
+
+    /* ===== MultiSelect (loja) ===== */
+    function initMS({ togId, panId, labId, listId, searchId, todosId, nenhumId, emptyId }) {
+      const tog = document.getElementById(togId), pan = document.getElementById(panId), lab = document.getElementById(labId);
+      tog.addEventListener('click', e => { e.stopPropagation(); document.querySelectorAll('.msp.open').forEach(p => { if (p !== pan) { p.classList.remove('open'); p.previousElementSibling?.classList.remove('open'); } }); pan.classList.toggle('open'); tog.classList.toggle('open'); });
+      document.addEventListener('click', () => { pan.classList.remove('open'); tog.classList.remove('open'); });
+      pan.addEventListener('click', e => e.stopPropagation());
+      if (searchId) document.getElementById(searchId).addEventListener('input', function () { const q = this.value.toLowerCase(); let vis = 0; document.querySelectorAll(`#${listId} .msi`).forEach(li => { const m = li.dataset.value.toLowerCase().includes(q); li.style.display = m ? '' : 'none'; if (m) vis++; }); if (emptyId) document.getElementById(emptyId).style.display = vis ? 'none' : ''; });
+      if (todosId) document.getElementById(todosId).addEventListener('click', e => { e.stopPropagation(); document.querySelectorAll(`#${listId} .msi:not([style*="none"])`).forEach(li => li.classList.add('checked')); updLbl(listId, lab); });
+      if (nenhumId) document.getElementById(nenhumId).addEventListener('click', e => { e.stopPropagation(); document.querySelectorAll(`#${listId} .msi:not([style*="none"])`).forEach(li => li.classList.remove('checked')); updLbl(listId, lab); });
+      document.getElementById(listId).addEventListener('click', e => { const li = e.target.closest('.msi'); if (!li) return; e.stopPropagation(); li.classList.toggle('checked'); updLbl(listId, lab); });
+    }
+    function updLbl(lid, lel) { const a = document.querySelectorAll(`#${lid} .msi`), c = document.querySelectorAll(`#${lid} .msi.checked`); lel.textContent = c.length === 0 ? 'Nenhum' : c.length === a.length ? `Todos (${a.length})` : `${c.length} sel.`; }
+    function getChk(lid) { return [...document.querySelectorAll(`#${lid} .msi.checked`)].map(li => li.dataset.value); }
+
+    initMS({ togId: 'lojaT', panId: 'lojaP', labId: 'lojaLbl', listId: 'lojaL', searchId: 'lojaS', todosId: 'lojaTd', nenhumId: 'lojaNh', emptyId: 'lojaE' });
+
+    flatpickr.localize(flatpickr.l10ns.pt);
+    flatpickr('#dataRange', { mode: 'range', dateFormat: 'd/m/Y', locale: 'pt', allowInput: true });
+
+    function aplicarFiltros(reset = true) {
+      if (reset) pagina = 1;
+      const lojas = getChk('lojaL');
+      const mod = document.getElementById('filtroMod').value;
+      const txt = document.getElementById('filtroTxt').value.trim().toLowerCase();
+      const rng = document.getElementById('dataRange').value;
+      let dI = null, dF = null;
+      if (rng.includes(' até ')) { const pts = rng.split(' até '); dI = parseDtBR(pts[0]); dF = parseDtBR(pts[1]); if (dF) dF.setHours(23, 59, 59, 999); }
+
+      dadosFiltrados = dadosLoja.filter(d => {
+        if (modeFilter !== 'all' && d.modalidade !== modeFilter) return false;
+        if (statusFilter !== 'all' && d.status !== statusFilter) return false;
+        if (lojas.length && !lojas.includes(d.loja)) return false;
+        if (mod && d.modalidade !== mod) return false;
+        if (txt && !d.oct.toLowerCase().includes(txt) && !d.gtv.toLowerCase().includes(txt)) return false;
+        const dt = parseDtBR(d.dataMov);
+        if (dI && dt && dt < dI) return false;
+        if (dF && dt && dt > dF) return false;
+        return true;
+      });
+      dadosFiltrados.sort((a, b) => {
+        let va = a[sortCol], vb = b[sortCol];
+        if (sortCol === 'dataMov') { va = parseDtBR(va) || new Date(0); vb = parseDtBR(vb) || new Date(0); }
+        if (typeof va === 'string') { va = va.toLowerCase(); vb = vb.toLowerCase(); }
+        if (va < vb) return sortDir === 'asc' ? -1 : 1;
+        if (va > vb) return sortDir === 'asc' ? 1 : -1;
+        return 0;
+      });
+      renderTabela();
+      atualizarKPIs();
+    }
+
+    function renderTabela() {
+      const body = document.getElementById('tBody'), vz = document.getElementById('linhaV');
+      const start = (pagina - 1) * POR_PAG, slice = dadosFiltrados.slice(start, start + POR_PAG);
+      [...body.querySelectorAll('tr:not(#linhaV)')].forEach(r => r.remove());
+      vz.style.display = dadosFiltrados.length ? 'none' : '';
+      slice.forEach(d => {
+        const idx = dadosLoja.indexOf(d);
+        const sit = mapSit(d.stsOct);
+        const tipo = mapTipo(d.tipo);
+        const mod = d.modalidade === 'Cofre Eletrônico' ? 'bcof' : 'btrans';
+        const stC = d.status === 'Conciliado' ? 'bs' : d.status === 'Divergente' ? 'bd' : 'bn';
+        const rowC = d.status === 'Conciliado' ? 'rc' : d.status === 'Divergente' ? 'rdi' : '';
+        const tr = document.createElement('tr'); tr.className = rowC;
+        tr.innerHTML = `
+            <td><strong>${d.loja}</strong></td>
+            <td class="mono">${d.oct}</td>
+            <td><span class="bp ${sit.c}">${sit.t}</span></td>
+            <td><span class="bp ${tipo.c}">${tipo.t}</span></td>
+            <td class="val vl">${fmt(d.valorNum)}</td>
+            <td class="mono">${d.dataMov}</td>
+            <td class="mono">${d.gtv}</td>
+            <td><span class="bp ${mod}">${d.modalidade === 'Cofre Eletrônico' ? 'Cofre' : 'Transportadora'}</span></td>
+            <td class="val vt" style="border-left:2px solid #BFDBFE">${d.valorTransp !== null ? fmt(d.valorTransp) : '<span style="color:var(--text-light)">—</span>'}</td>
+            <td class="mono" style="color:var(--c-transp)">${d.dtColeta || '—'}</td>
+            <td class="val vb" style="border-left:2px solid #DDD6FE">${d.valorBank !== null ? fmt(d.valorBank) : '<span style="color:var(--text-light)">—</span>'}</td>
+            <td class="mono" style="color:var(--c-bank)">${d.dtBanco || '—'}</td>
+            <td><span class="bp ${stC}">${d.status}</span></td>
+            <td style="text-align:center"><button class="btn-icon btn-dt" data-idx="${idx}" title="Editar"><i class="bi bi-pencil-square"></i></button></td>
+        `;
+        body.appendChild(tr);
+      });
+      const total = dadosFiltrados.length, pages = Math.ceil(total / POR_PAG);
+      document.getElementById('tableCount').textContent = `${total} registro${total !== 1 ? 's' : ''}`;
+      document.getElementById('pagInfo').textContent = total ? `Exibindo ${start + 1}–${Math.min(start + POR_PAG, total)} de ${total}` : '—';
+      const pb = document.getElementById('pagBtns'); pb.innerHTML = '';
+      const ab = (l, p, dis, act) => { const b = document.createElement('button'); b.className = 'pgbtn' + (act ? ' active' : ''); b.innerHTML = l; if (dis) b.disabled = true; b.addEventListener('click', () => { pagina = p; renderTabela(); }); pb.appendChild(b); };
+      ab('<i class="bi bi-chevron-left"></i>', pagina - 1, pagina <= 1);
+      const s2 = Math.max(1, pagina - 2), e2 = Math.min(pages, pagina + 2);
+      for (let p = s2; p <= e2; p++) ab(p, p, false, p === pagina);
+      ab('<i class="bi bi-chevron-right"></i>', pagina + 1, pagina >= pages);
+    }
+
+    function atualizarKPIs() {
+      const d = dadosFiltrados;
+      const tL = d.reduce((s, r) => s + r.valorNum, 0);
+      const tT = d.reduce((s, r) => s + (r.valorTransp || 0), 0);
+      const tB = d.reduce((s, r) => s + (r.valorBank || 0), 0);
+      const diverg = d.filter(r => r.status === 'Divergente').length;
+      document.getElementById('kpiLoja').textContent = fmt(tL);
+      document.getElementById('kpiLojaC').textContent = `${d.length} registros`;
+      document.getElementById('kpiTransp').textContent = fmt(tT);
+      document.getElementById('kpiTranspC').textContent = `${d.filter(r => r.valorTransp !== null).length} com valor`;
+      document.getElementById('kpiBank').textContent = fmt(tB);
+      document.getElementById('kpiBankC').textContent = `${d.filter(r => r.valorBank !== null).length} lançamentos`;
+      document.getElementById('kpiDiv').textContent = diverg;
+      document.getElementById('kpiDivN').textContent = `${diverg} registro${diverg !== 1 ? 's' : ''}`;
+      const concil = d.filter(r => r.status === 'Conciliado').length;
+      const pct = d.length ? (concil / d.length * 100) : 0;
+      document.getElementById('progressLabel').textContent = `${concil} / ${d.length}`;
+      document.getElementById('progressBar').style.width = pct + '%';
+    }
+
+    document.querySelectorAll('.dt th.sort').forEach(th => {
+      th.addEventListener('click', () => {
+        const col = th.dataset.col;
+        if (sortCol === col) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+        else { sortCol = col; sortDir = 'asc'; }
+        document.querySelectorAll('.dt th').forEach(t => t.classList.remove('asc', 'desc'));
+        th.classList.add(sortDir);
+        aplicarFiltros(false);
+      });
+    });
+
+    // Botões de modalidade
+    document.getElementById('modeTabs').addEventListener('click', e => { const btn = e.target.closest('.mtab'); if (!btn) return; document.querySelectorAll('#modeTabs .mtab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); modeFilter = btn.dataset.mode; aplicarFiltros(); });
+    // Botões de status
+    document.getElementById('statusTabs').addEventListener('click', e => { const btn = e.target.closest('.mtab'); if (!btn) return; document.querySelectorAll('#statusTabs .mtab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); statusFilter = btn.dataset.status; aplicarFiltros(); });
+
+    /* ===== Modal ===== */
+    document.getElementById('tBody').addEventListener('click', e => {
+      const btn = e.target.closest('.btn-dt'); if (!btn) return;
+      editIdx = +btn.dataset.idx;
+      const d = dadosLoja[editIdx]; if (!d) return;
+      const tipoLeg = mapTipo(d.tipo);
+      document.getElementById('detalheGrid').innerHTML = [
+        { l: 'Loja', v: d.loja }, { l: 'OCT', v: d.oct }, { l: 'GTV', v: d.gtv },
+        { l: 'Modalidade', v: d.modalidade }, { l: 'Situação', v: d.stsOct },
+        { l: 'Tipo', v: `${tipoLeg.t} (${d.tipo})` },
+        { l: 'Valor Loja', v: fmt(d.valorNum) }, { l: 'Data Mov.', v: d.dataMov },
+      ].map(i => `<div class="di"><label>${i.l}</label><span>${i.v}</span></div>`).join('');
+      document.getElementById('recLoja').textContent = fmt(d.valorNum);
+      const rt = document.getElementById('recTransp'); rt.textContent = d.valorTransp !== null ? fmt(d.valorTransp) : '—'; rt.className = 'rpv' + (d.valorTransp !== null ? (d.valorTransp === d.valorNum ? ' match' : ' nomatch') : ' na');
+      document.getElementById('recTranspDt').textContent = d.dtColeta ? 'Coleta: ' + d.dtColeta : '';
+      const rb = document.getElementById('recBank'); rb.textContent = d.valorBank !== null ? fmt(d.valorBank) : '—'; rb.className = 'rpv' + (d.valorBank !== null ? (d.valorBank === d.valorNum ? ' match' : ' nomatch') : ' na');
+      document.getElementById('recBankDt').textContent = d.dtBanco ? 'Lançamento: ' + d.dtBanco : '';
+      document.getElementById('modalValDep').value = d.valorDep !== null ? String(d.valorDep).replace('.', ',') : '';
+      document.getElementById('modalStatus').value = d.status;
+      document.getElementById('modalObs').value = d.obs || '';
+      document.getElementById('detalheModal').classList.add('open');
+    });
+    ['fecharModal', 'cancelarModal'].forEach(id => document.getElementById(id).addEventListener('click', () => document.getElementById('detalheModal').classList.remove('open')));
+    document.getElementById('detalheModal').addEventListener('click', e => { if (e.target === document.getElementById('detalheModal')) document.getElementById('detalheModal').classList.remove('open'); });
+    document.getElementById('salvarModal').addEventListener('click', () => {
+      if (editIdx === null) return;
+      const raw = document.getElementById('modalValDep').value.replace(/\./g, '').replace(',', '.');
+      const val = parseFloat(raw);
+      dadosLoja[editIdx].valorDep = isNaN(val) ? null : val;
+      dadosLoja[editIdx].status = document.getElementById('modalStatus').value;
+      dadosLoja[editIdx].obs = document.getElementById('modalObs').value;
+      document.getElementById('detalheModal').classList.remove('open');
+      aplicarFiltros(false);
+      alert2('Registro atualizado.', 'success');
+    });
+
+    document.getElementById('btnPrint').addEventListener('click', () => window.print());
+
+    // Inicialização: carrega automaticamente do servidor
+    carregarDoServidor();
+  </script>
+</body>
+
+</html>
